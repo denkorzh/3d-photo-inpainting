@@ -24,19 +24,19 @@ from bilateral_filtering import sparse_bilateral_filtering
 ssl._create_default_https_context = ssl._create_unverified_context
 
 
-def scale_translation_with_depth_quantile(poses: List[np.ndarray],
+def scale_translation_with_depth_quantile(poses: List[List[np.ndarray]],
                                           depth_tensor: np.ndarray,
                                           p: float = 0.1,
                                           value: float = 1.25,
-                                          ) -> List[np.ndarray]:
+                                          ) -> List[List[np.ndarray]]:
     quantile_value = np.percentile(depth_tensor, p)
     scale = value / quantile_value
     out = []
-    for pose in poses:
+    for pose in poses[0]:
         pose = pose.copy()
         pose[:3, -1] *= scale
         out.append(pose)
-    return out
+    return [out]
 
 
 parser = argparse.ArgumentParser()
